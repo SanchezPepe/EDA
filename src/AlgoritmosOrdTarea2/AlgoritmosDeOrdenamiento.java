@@ -1,4 +1,4 @@
-package PeliculasT2;
+package AlgoritmosOrdTarea2;
 
 import java.util.Arrays;
 import java.util.Random;

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Netflix;
+package AlgoritmosOrdTarea2;
 
-import PeliculasT2.AlgoritmosDeOrdenamiento;
+import AlgoritmosOrdTarea2.AlgoritmosDeOrdenamiento;
 import java.io.File;
 import java.util.*;
 
