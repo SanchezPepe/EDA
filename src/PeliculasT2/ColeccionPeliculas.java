@@ -37,7 +37,7 @@ public class ColeccionPeliculas  {
     public int cuentaP(){
         int cont = 0;
         try{
-            String nomArchivo = "movie_titles1.txt";
+            String nomArchivo = "movie_titles2.txt";
             File archivo = new File(nomArchivo);
             Scanner in = new Scanner(archivo);
             while(in.hasNextLine()){
