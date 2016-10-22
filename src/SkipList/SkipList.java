@@ -15,11 +15,13 @@ public class SkipList<T extends Comparable<T>>{
     
     private int cont;
     private NodoS<T> cabeza, cola;
+    private Random r;
     
     public SkipList(){
         cont = 0;
         cabeza.setRigth(cola);
         cola.setLeft(cabeza);
+        r = new Random();
     }
     
     public SkipList(T elem){
@@ -32,6 +34,10 @@ public class SkipList<T extends Comparable<T>>{
             cabeza.setRigth(nuevo);
             cola.setLeft(nuevo);
         }
+    }
+    
+    public boolean coinFlip(){
+        return r.nextBoolean();
     }
         
     public NodoS<T> find(T elem){
@@ -76,6 +82,10 @@ public class SkipList<T extends Comparable<T>>{
         abajo.setUp(nuevo);
     }
     
+    private void nuevoNivel(NodoS<T> nuevo){
+        
+    }
+    
     public void insert(T elem){
         NodoS<T> nuevo = new NodoS(elem);;
         NodoS<T> ant = find(elem);
@@ -96,18 +106,6 @@ public class SkipList<T extends Comparable<T>>{
             
         }
         //ELSE, TERMINÓ DE INSERTAR
-    }
-    
-    public void insert2(T elem){
-        NodoS<T> nuevo = new NodoS(elem);
-        NodoS<T> ant = find(elem);
-        NodoS<T> escalera, index;
-        int contSub = 0;
-        
-        nuevo.setLeft(ant);
-        nuevo.setRigth(ant.getRigth());
-        ant.getRigth().setLeft(ant);
-        
     }
     
     public static void main(String[] args) {
