@@ -31,15 +31,8 @@ public class SkipList<T extends Comparable<T>>{
         if(elem != null){
             cont = 1;
             NodoS<T> nuevo = new NodoS(elem);
-            nuevo.setRigth(cola);
-            nuevo.setLeft(cabeza);
-            cabeza.setRigth(nuevo);
-            cola.setLeft(nuevo);
+            this.ligaH(cabeza, nuevo, cola);
         }
-    }
-
-    public boolean coinFlip(){
-        return r.nextBoolean();
     }
 
     public NodoS<T> find(T elem){
@@ -60,14 +53,24 @@ public class SkipList<T extends Comparable<T>>{
         else{
             if(elem.compareTo(aux.getElem()) > 0 && aux.getRigth() != null) //SI ELEMENTO ES MAYOR AL NODO Y TIENE DERECHA - SE RECORRE
                 return find(aux.getRigth(), elem);
-            if(aux.getDown() != null) //SI TIENE ABAJO - SE RECORRE ABAJO
-                return find(aux.getDown(), elem);
+            if(aux.getDown() != null && aux.getDown().getRigth() != null) //SI TIENE ABAJO - SE RECORRE ABAJO-AL LADO
+                return find(aux.getDown().getRigth(), elem);
             else //SI ELEMENTO ES MENOR AL NODO Y NO TIENE ABAJO = NO LO ENCONTRÓ - REGRESA DONDE DEBERÍA IR
                 return aux.getLeft();
 
         }
     }
 
+    public void insert(T elem){
+        //POR IMPLEMENTAR
+    }
+
+    //MÉTODOS AUXILIARES
+    //VOLADO
+    public boolean coinFlip(){
+        return r.nextBoolean();
+    }
+    
     //ACOMODAR APUNTADORES EN HORIZONAL
     private void ligaH(NodoS<T> izq, NodoS<T> nuevo, NodoS<T> der){
         izq.setRigth(nuevo);
@@ -84,15 +87,23 @@ public class SkipList<T extends Comparable<T>>{
         abajo.setUp(nuevo);
     }
 
-    //CREACION DE UN NUEVO NIVEL SI ARRIBA ES NULO y FLIP COIN == TRUE
+    //CREACION DE UN NUEVO NIVEL Y REASIGNA LA CABEZA Y LA COLA
     private void nuevoNivel(NodoS<T> nodo){
+        NodoS<T> arriba = clona(nodo);
+        arriba.setLeft(clona(cabeza));
+        arriba.setRigth(clona(cola));
+        cabeza = arriba.getLeft();
+        cola = arriba.getRigth();
     }
 
-
-    public void insert(T elem){
-        
+    //CLONA EL NODO DADO Y ACOMODA APUNTADORES
+    public NodoS<T> clona(NodoS<T> nodo){
+        NodoS<T> nuevo = new NodoS<T>(nodo.getElem());
+        nodo.setUp(nuevo);
+        nuevo.setDown(nodo);
+        return nuevo;
     }
-
+    
     public static void main(String[] args) {
         Random r = new Random();
         System.out.println(r.nextBoolean());
