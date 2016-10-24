@@ -12,7 +12,7 @@ import java.util.Random;
  * @author hca
  */
 public class SkipList<T extends Comparable<T>>{
-
+    
     private int cont;
     private NodoS<T> cabeza, cola;
     private Random r;
