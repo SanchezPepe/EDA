@@ -51,6 +51,8 @@ public class SkipList<T extends Comparable<T>>{
             }
         }
         else{
+            if(aux.getElem() == null) //SI ES LA COLA
+                return aux.getLeft();
             if(elem.compareTo(aux.getElem()) > 0 && aux.getRigth() != null) //SI ELEMENTO ES MAYOR AL NODO Y TIENE DERECHA - SE RECORRE
                 return find(aux.getRigth(), elem);
             if(aux.getDown() != null && aux.getDown().getRigth() != null) //SI TIENE ABAJO - SE RECORRE ABAJO-AL LADO
@@ -60,11 +62,36 @@ public class SkipList<T extends Comparable<T>>{
 
         }
     }
-
-    public void insert(T elem){
-        
+    
+    public NodoS<T> find2(T elem){
+        return find2(cabeza, elem);
     }
-
+    //http://segweb.blogspot.mx/2012/04/skiplist.html
+    
+    private NodoS<T> find2(NodoS<T> aux, T elem){
+        if(aux.getElem().equals(elem)){ //SI LO ENCONTRÉ
+            if(aux.getDown() == null) //SI NO TIENE ABAJO
+                return aux;
+            else{
+                while(aux.getDown() != null) //SI TIENE ABAJO
+                    aux = aux.getDown();
+                return aux;
+            }
+        }
+        else{
+            if(elem.compareTo(aux.getRigth().getElem()) < 0){
+                if(aux.getDown() == null)
+                    return aux;
+                else
+                    return find2(aux.getDown(), elem);
+            }
+            if(aux.getRigth().getElem() == null)    //LLEGÓ A LA COLA
+                return aux;
+            if(aux.getRigth() != null && elem.compareTo(aux.getRigth().getElem()) > 0)
+                return find2(aux.getRigth(), elem);
+        }
+    }
+        
     //MÉTODOS AUXILIARES
     //VOLADO
     public boolean coinFlip(){
