@@ -84,13 +84,16 @@ public class SkipList<T extends Comparable<T>>{
                     return aux;
                 else
                     return find2(aux.getDown(), elem);
-            }
-            if(aux.getRigth().getElem() == null)    //LLEGÓ A LA COLA
-                return aux;
-            if(aux.getRigth() != null && elem.compareTo(aux.getRigth().getElem()) > 0)
-                return find2(aux.getRigth(), elem);
+            }else
+                if(aux.getRigth() != null){
+                    if(aux.getRigth().getElem() == null)    //LLEGÓ A LA COLA
+                        return aux;
+                    else
+                        return find2(aux.getRigth(), elem);
+                }
         }
     }
+    
         
     //MÉTODOS AUXILIARES
     //VOLADO
