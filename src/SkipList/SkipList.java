@@ -17,7 +17,7 @@ public class SkipList<T extends Comparable<T>>{
     private NodoS<T> cabeza, cola;
     private Random r;
     private int altura;
-
+    
     public SkipList(){
         cont = 0;
         altura = 0;
@@ -62,7 +62,7 @@ public class SkipList<T extends Comparable<T>>{
     }
 
     public void insert(T elem){
-        //POR IMPLEMENTAR
+        
     }
 
     //MÉTODOS AUXILIARES
@@ -94,6 +94,7 @@ public class SkipList<T extends Comparable<T>>{
         arriba.setRigth(clona(cola));
         cabeza = arriba.getLeft();
         cola = arriba.getRigth();
+        altura++;
     }
 
     //CLONA EL NODO DADO Y ACOMODA APUNTADORES
@@ -106,6 +107,6 @@ public class SkipList<T extends Comparable<T>>{
     
     public static void main(String[] args) {
         Random r = new Random();
-        System.out.println(r.nextBoolean());
+        System.out.println(Math.log(1));
     }
 }
