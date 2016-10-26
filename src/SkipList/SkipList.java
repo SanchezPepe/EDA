@@ -45,23 +45,6 @@ public class SkipList<T extends Comparable<T>>{
         return find(cabeza, elem);
     }
     
-    public NodoS<T> findj(NodoS<T> aux, T elem){
-        if(elem.compareTo(aux.getRigth().getElem()) > 0){
-            return find(aux.getRigth(), elem);
-        }
-        if(elem.compareTo(aux.getRigth().getElem()) < 0){
-            if(aux.getDown() != null)
-                return find(aux.getDown(), elem);
-            else
-                return aux;
-        }
-        if(elem.equals(aux.getElem()))
-            while(aux.getDown() != null)
-                aux = aux.getDown();
-        return aux;
-        
-    }
-    
     private NodoS<T> find(NodoS<T> aux, T elem){
         if(aux.getElem() != null && aux.getElem().equals(elem)){ //SI LO ENCONTRÉ
             if(aux.getDown() == null) //SI NO TIENE ABAJO
@@ -88,18 +71,71 @@ public class SkipList<T extends Comparable<T>>{
         }
     }
     
+    public NodoS<T> buscaLista(NodoS<T> nodo, T elem){
+        if(esCola(nodo))
+            return nodo.getLeft();
+        if(elem.compareTo(nodo.getElem()) > 0)
+            return buscaLista(nodo.getRigth(), elem);
+        else
+            return nodo.getLeft();
+    }
+    
     public void insert(T elem){
         NodoS<T> nuevo = new NodoS(elem);
-        if(cont == 0){
-            ligaH(cabeza, nuevo, cola);
-            return;
-        }
         NodoS<T> ant = find(elem);
         ligaH(ant, nuevo, ant.getRigth());
-        int nivelA = altura;
-        while(flipCoin() && altura < Math.log(cont)){
-            
+        cont++;
+        if(find(elem) == null)
+            return;
+        int veces = 0, i;
+        NodoS<T> aux, nvo, lin;
+        while(flipCoin()){
+            veces++;
+            i = 0;
+            aux = cabeza;
+            if(aux.getDown() != null){
+                while(aux.getDown() != null)
+                    aux = aux.getDown();
+                while(i < veces){
+                    i++;
+                    aux = aux.getUp();
+                }
+                lin = buscaLista(aux, elem);
+                ligaH(lin, new NodoS(elem), lin.getRigth());
+                i = 0;
+                nvo = nuevo;
+                while(i < veces){
+                    nvo = nvo.getUp();
+                    i++;
+                }
+                nvo.setUp(lin.getRigth());
+                lin.getRigth().setDown(nvo);
+            }else{
+                if(altura == 0){
+                    cabeza.setUp(new NodoS(null));
+                    cabeza.getUp().setDown(cabeza);
+                    nuevo.setUp(new NodoS(elem));
+                    nuevo.getUp().setDown(nuevo);
+                    cola.setUp(new NodoS(null));
+                    cola.getUp().setDown(cola);
+                    ligaH(cabeza.getUp(), nuevo.getUp(), cola.getUp());
+                    cabeza = cabeza.getUp();
+                    cola = cola.getUp();
+                    nuevo = nuevo.getUp();
+                    altura++;
+                
+                }
+            }
         }
+    }
+    
+    
+   
+        
+    //MÉTODOS AUXILIARES
+    //VOLADO
+    public boolean flipCoin(){
+        return r.nextBoolean();
     }
     
     public boolean esCabeza(NodoS<T> nodo){
@@ -109,14 +145,6 @@ public class SkipList<T extends Comparable<T>>{
     public boolean esCola(NodoS<T> nodo){
         return nodo.getRigth() == null && nodo.getElem() == null;
     }
-   
-        
-    //MÉTODOS AUXILIARES
-    //VOLADO
-    public boolean flipCoin(){
-        return r.nextBoolean();
-    }
-    
     //ACOMODAR APUNTADORES EN HORIZONAL
     private void ligaH(NodoS<T> izq, NodoS<T> nuevo, NodoS<T> der){
         izq.setRigth(nuevo);
@@ -125,45 +153,6 @@ public class SkipList<T extends Comparable<T>>{
         der.setLeft(nuevo);
     }
 
-    //ACOMODAR APUNTADORES EN VERTICAL
-    private void ligaV(NodoS<T> arriba, NodoS<T> nuevo, NodoS<T> abajo){
-        arriba.setDown(nuevo);
-        nuevo.setUp(arriba);
-        nuevo.setDown(abajo);
-        abajo.setUp(nuevo);
-    }
-
-    //CREACION DE UN NUEVO NIVEL Y REASIGNA LA CABEZA Y LA COLA
-    private void nuevoNivel(NodoS<T> nodo){
-        NodoS<T> arriba = clona(nodo);
-        arriba.setLeft(clona(cabeza));
-        arriba.setRigth(clona(cola));
-        cabeza = arriba.getLeft();
-        cola = arriba.getRigth();
-        altura++;
-    }
-
-    //CLONA EL NODO DADO Y ACOMODA APUNTADORES
-    public NodoS<T> clona(NodoS<T> nodo){
-        NodoS<T> nuevo = new NodoS<T>(nodo.getElem());
-        nodo.setUp(nuevo);
-        nuevo.setDown(nodo);
-        return nuevo;
-    }
-    
-    public NodoS<T> getNodoLista(int nivel, T elem){
-        NodoS<T> aux = cabeza;
-        int i = altura;
-        while(i > nivel){
-            aux = aux.getDown();
-            i--;
-        }
-        aux = aux.getRigth();
-        while(aux.getRigth() != null && elem.compareTo(aux.getElem()) > 0)
-            aux = aux.getRigth();
-        return aux.getLeft();
-    }
-    
     public int getAncho(){
         int res = 1;
         NodoS<T> aux = cabeza;
@@ -176,54 +165,35 @@ public class SkipList<T extends Comparable<T>>{
         return res;
     }
     
-    public String imprime(){
+    public String imp(){
+        int ancho = this.getAncho();
         StringBuilder cad = new StringBuilder();
         NodoS<T> aux = cabeza;
-        while(aux.getDown() != null)
-            aux = aux.getDown(); //ENCONTRAR LA CABEZA DE LA LISTA CON ALTURA 0
-        int ancho = this.getAncho();
-        System.out.println(ancho);
-        if(altura == 0){
-            aux = cabeza;
-            T[] lista = (T[]) new Object();
-            for(int i = 0; i < lista.length; i++){
-                lista[i] = aux.getElem();
-                System.out.println(lista[i]);
-                aux = aux.getRigth();
-                
+        NodoS<T> aux2 = cabeza;
+        for(int i = 0; i < ancho; i++){
+            for(int j = 0; j <= altura; j++){
+                cad.append(aux.getElem()).append("     ");
+                if(aux.getUp() == null)
+                    while(j <= altura){
+                        cad.append(" ");
+                        j++;
+                    }
+                else
+                    aux = aux.getUp();
             }
-        }
-        else{
-            T lamina[][] = (T[][]) new Object[ancho][altura];
-            for(int i = 0; i <= ancho; i++){
-                for(int j = 0; j <= altura; j ++){
-                    lamina[i][j] = aux.getElem();
-                    if(aux.getUp() == null){
-                        while(j <= altura){
-                            lamina[i][j] = null;
-                            j++;
-                        }
-                    }else
-                        aux = aux.getUp();
-                }
-            }
-            for(int k = altura; k > 0; k--){
-                for(int m = 0; m <= ancho; m++){
-                    cad.append(lamina[m][k]).append("-");
-                }
-                cad.append("\n");
+            cad.append("\n");
+            if(aux2.getRigth() != null){
+                aux = aux2.getRigth();
+                aux2 = aux2.getRigth();
             }
         }
         return cad.toString();
     }
     
     public static void main(String[] args) {
-        SkipList<Integer> l = new SkipList(49);
-        System.out.println(l.find(50).getElem());
-        System.out.println(l.esCabeza(l.find(50)));
-        System.out.println(l.cont);
-        
-        
-        System.out.println(l.imprime());
+        SkipList<Integer> l = new SkipList();
+        for(int i = 0; i < 5; i++)
+            l.insert(i);
+        System.out.println("\nNúmero de elementos: " + l.cont + "\nAltura: " + l.altura + "\nImpesión:\n"+ l.imp());
     }
 }
