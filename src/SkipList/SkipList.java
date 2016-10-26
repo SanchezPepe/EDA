@@ -164,7 +164,7 @@ public class SkipList<T extends Comparable<T>>{
     }
     
     public static void main(String[] args) {
-        SkipList<Integer> l = new SkipList(3);
-        System.out.println(l.getAncho());
+        SkipList<Integer> l = new SkipList(45);
+        System.out.println(l.find(45).getElem());
     }
 }
