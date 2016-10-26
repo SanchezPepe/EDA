@@ -84,50 +84,106 @@ public class SkipList<T extends Comparable<T>>{
         NodoS<T> nuevo = new NodoS(elem);
         NodoS<T> ant = find(elem);
         ligaH(ant, nuevo, ant.getRigth());
+        
+        System.out.println("i "+ant.getElem() + "nuevo : " + nuevo.getElem()+ "derecho : " + nuevo.getRigth().getElem());
+        
         cont++;
         if(find(elem) == null)
             return;
-        int veces = 0, i;
-        NodoS<T> aux, nvo, lin;
-        while(flipCoin()){
-            veces++;
-            i = 0;
-            aux = cabeza;
-            if(aux.getDown() != null){
-                while(aux.getDown() != null)
-                    aux = aux.getDown();
-                while(i < veces){
-                    i++;
-                    aux = aux.getUp();
-                }
-                lin = buscaLista(aux, elem);
-                ligaH(lin, new NodoS(elem), lin.getRigth());
-                i = 0;
-                nvo = nuevo;
-                while(i < veces){
-                    nvo = nvo.getUp();
-                    i++;
-                }
-                nvo.setUp(lin.getRigth());
-                lin.getRigth().setDown(nvo);
-            }else{
-                if(altura == 0){
-                    cabeza.setUp(new NodoS(null));
-                    cabeza.getUp().setDown(cabeza);
-                    nuevo.setUp(new NodoS(elem));
-                    nuevo.getUp().setDown(nuevo);
-                    cola.setUp(new NodoS(null));
-                    cola.getUp().setDown(cola);
-                    ligaH(cabeza.getUp(), nuevo.getUp(), cola.getUp());
-                    cabeza = cabeza.getUp();
-                    cola = cola.getUp();
-                    nuevo = nuevo.getUp();
-                    altura++;
-                
-                }
-            }
+        int x = 0;
+        
+        boolean resp = flipCoin();
+        System.out.println("volado1: " + resp);
+        while(resp && x < Math.log(cont)){
+            System.out.println("entra");
+            System.out.println(resp + "elem: " + elem);
+            nuevo = nuevo.cuelgaEnNivelSup(elem);
+            if(nuevo.getLeft() == null && nuevo.getRigth() == null)
+                resp = false;
+            else
+                resp = flipCoin();
+            x++;
         }
-    }
+        if(nuevo.getLeft()==null && nuevo.getRigth()==null){
+               nuevo.cueldaDerecha(new NodoS());
+               nuevo.cuelgaIzquierda(new NodoS());
+               nuevo.getRigth().setDown(cola);
+               cola.setUp(nuevo.getRigth());
+               nuevo.getLeft().setDown(cabeza);
+               cabeza.setUp(nuevo.getLeft());
+               cola=nuevo.getRigth();
+               cabeza=nuevo.getLeft();
+                resp = false;
+            }
+
+            
+//            auxI = nuevo;
+//            auxD = nuevo;
+//            while(auxI.getLeft() != null && auxI.getLeft().getUp() == null)
+//                auxI = auxI.getLeft();
+//            while(auxD.getRigth() != null && auxD.getRigth().getUp() == null)
+//                auxD = auxD.getRigth();
+//            if(auxI == cabeza && auxD == cola){
+//                resp = false;
+//                cabeza.setUp(new NodoS(null));
+//                cabeza.getUp().setDown(cabeza);
+//                cola.setUp(new NodoS(null));
+//                cola.getUp().setDown(cola);
+//                cabeza = cabeza.getUp();
+//                cola = cola.getUp();
+//                NodoS<T> nvo = new NodoS(elem);
+//                ligaH(cabeza, nvo ,cola);
+//                nvo.setDown(nuevo);
+//                nuevo.setUp(nvo);
+//                
+//            }
+//            resp = flipCoin();
+        }
+        
+        
+//        int veces = 0, i;
+//        NodoS<T> aux, nvo, lin;
+//        while(flipCoin()){
+//            veces++;
+//            i = 0;
+//            aux = cabeza;
+//            if(aux.getDown() != null){
+//                while(aux.getDown() != null)
+//                    aux = aux.getDown();
+//                while(i < veces){
+//                    i++;
+//                    aux = aux.getUp();
+//                }
+//                lin = buscaLista(aux, elem);
+//                ligaH(lin, new NodoS(elem), lin.getRigth());
+//                i = 0;
+//                nvo = nuevo;
+//                while(i < veces){
+//                    nvo = nvo.getUp();
+//                    i++;
+//                }
+//                nvo.setUp(lin.getRigth());
+//                lin.getRigth().setDown(nvo);
+//            }else{
+//                if(altura == 0){
+//                    cabeza.setUp(new NodoS(null));
+//                    cabeza.getUp().setDown(cabeza);
+//                    nuevo.setUp(new NodoS(elem));
+//                    nuevo.getUp().setDown(nuevo);
+//                    cola.setUp(new NodoS(null));
+//                    cola.getUp().setDown(cola);
+//                    ligaH(cabeza.getUp(), nuevo.getUp(), cola.getUp());
+//                    cabeza = cabeza.getUp();
+//                    cola = cola.getUp();
+//                    nuevo = nuevo.getUp();
+//                    altura++;
+//                
+//                }
+//            }
+//        }
+//    }
+    
+    
     
     //MÉTODOS AUXILIARES
     //VOLADO
@@ -189,7 +245,7 @@ public class SkipList<T extends Comparable<T>>{
     
     public static void main(String[] args) {
         SkipList<Integer> l = new SkipList();
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 2; i++)
             l.insert(i);
         System.out.println("\nNúmero de elementos: " + l.cont + "\nAltura: " + l.altura + "\nImpesión:\n"+ l.imp());
     }
