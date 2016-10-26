@@ -71,6 +71,32 @@ public class SkipList<T extends Comparable<T>>{
         }
     }
     
+    public void restruc(){
+        NodoS<T> aux = cabeza;
+        while(aux.getDown() != null)
+            aux = aux.getDown();
+        cabeza = aux;
+        while(aux.getRigth() != null){
+            aux.setUp(null);
+            aux = aux.getRigth();
+        }
+        aux.setUp(null);
+        cola = aux;
+        boolean band = false;
+        while(aux.getLeft() != null){
+            if(!band){
+                this.cloneUp(aux);
+                aux = aux.getLeft();
+                band = true;
+            }
+            if(aux.getLeft() != null)
+                aux = aux.getLeft();
+            band = false;
+        }
+    }
+    
+    
+    
     public void insertN(T elem){
         NodoS<T> ant, nuevo, ai, ad;
         if(elem != null){
@@ -210,15 +236,18 @@ public class SkipList<T extends Comparable<T>>{
     public static void main(String[] args) {
         SkipList<Integer> l = new SkipList();
         //INSERCIÓN
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 64; i++)
             l.insertN(i);
         System.out.println("Número de elementos: " + l.cont + "\nAltura: " + l.altura + "\nImpresión:\n"+ l.imp());
         
         //BORRADO
-        l.borra(8);
-        l.borra(1);
+        //l.borra(8);
+        //l.borra(1);
         
         System.out.println("Número de elementos: " + l.cont + "\nAltura: " + l.altura + "\nImpresión:\n"+ l.imp());
+        
+        l.restruc();
+        System.out.println(l.imp());
         
     }
 }
