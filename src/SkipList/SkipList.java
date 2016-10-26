@@ -129,9 +129,6 @@ public class SkipList<T extends Comparable<T>>{
         }
     }
     
-    
-   
-        
     //MÉTODOS AUXILIARES
     //VOLADO
     public boolean flipCoin(){
