@@ -72,26 +72,24 @@ public class SkipList<T extends Comparable<T>>{
     }
     
     public void restruc(){
-        NodoS<T> aux = cabeza;
-        while(aux.getDown() != null)
-            aux = aux.getDown();
-        cabeza = aux;
-        while(aux.getRigth() != null){
+        NodoS<T> aux;
+        while(cabeza.getDown() != null){
+            cabeza = cabeza.getDown();
+            cola = cola.getDown();
+        }
+        aux = cabeza;
+        while(aux != null){
             aux.setUp(null);
             aux = aux.getRigth();
         }
-        aux.setUp(null);
-        cola = aux;
+        aux = cabeza;
+        int i = 0;
         boolean band = false;
-        while(aux.getLeft() != null){
-            if(!band){
+        while(i < this.getAncho()/2){
+            while(aux != null)
+            if(band){
                 this.cloneUp(aux);
-                aux = aux.getLeft();
-                band = true;
             }
-            if(aux.getLeft() != null)
-                aux = aux.getLeft();
-            band = false;
         }
     }
     
@@ -236,15 +234,15 @@ public class SkipList<T extends Comparable<T>>{
     public static void main(String[] args) {
         SkipList<Integer> l = new SkipList();
         //INSERCIÓN
-        for(int i = 0; i < 64; i++)
+        for(int i = 0; i < 40; i++)
             l.insertN(i);
-        System.out.println("Número de elementos: " + l.cont + "\nAltura: " + l.altura + "\nImpresión:\n"+ l.imp());
+        //System.out.println("Número de elementos: " + l.cont + "\nAltura: " + l.altura + "\nImpresión:\n"+ l.imp());
         
         //BORRADO
         //l.borra(8);
         //l.borra(1);
         
-        System.out.println("Número de elementos: " + l.cont + "\nAltura: " + l.altura + "\nImpresión:\n"+ l.imp());
+        //System.out.println("Número de elementos: " + l.cont + "\nAltura: " + l.altura + "\nImpresión:\n"+ l.imp());
         
         l.restruc();
         System.out.println(l.imp());
