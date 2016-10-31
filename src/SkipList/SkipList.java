@@ -284,17 +284,14 @@ public class SkipList<T extends Comparable<T>>{
     public static void main(String[] args) {
         SkipList<Integer> l = new SkipList();
         //INSERCIÓN
-        for(int i = 1; i <= 10; i++)
+        for(int i = 1; i <= 10 ; i++)
             l.insertN(i);
         l.impV();
         l.impH();
         
-        Random r = new Random();
-        
         //BORRADO
-        l.delete(r.nextInt(l.size));
-        l.delete(r.nextInt(l.size));
-        l.delete(r.nextInt(l.size));
+        l.delete(5);
+        l.delete(4);
 
         l.impH();
         
