@@ -50,4 +50,15 @@ public class HashTable<T> {
         cont++;
     }
     
+    public boolean find(T elem){
+        int aux = hash(elem) % tabla.length;
+        Nodo<T> actual = tabla[aux];
+        while(actual != null || actual.getElem().equals(elem))
+            actual = actual.getSig();
+        if(actual != null)
+            return true;
+        else
+            return false;
+    }
+    
 }
