@@ -252,7 +252,7 @@ public class SkipList<T extends Comparable<T>>{
                 aux2 = aux2.getRigth();
             }
         }
-        System.out.println("Número de elementos: " + size + "\nAltura: " + altura + "\nImpresión:");
+        System.out.println("Número de elementos: " + size + "\nAltura máxima: " + (int)(Math.log(size)+1) + "\nAltura actual: " + altura + "\nImpresión:");
         System.out.println(cad.toString());
     }
     
@@ -298,7 +298,7 @@ public class SkipList<T extends Comparable<T>>{
             }
             cad.append("\n");
         }
-        System.out.println("Número de elementos: " + size + "\nAltura: " + altura + "\nImpresión:");
+        System.out.println("Número de elementos: " + size + "\nAltura máxima: " + (int)(Math.log(size)+1) + "\nAltura actual: " + altura + "\nImpresión:");
         System.out.println(cad.toString());
     }
     
