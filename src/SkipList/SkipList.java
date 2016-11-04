@@ -61,7 +61,7 @@ public class SkipList<T extends Comparable<T>>{
             else
                 return find(aux.getDown(), elem);
         }else{
-            if(elem.compareTo(aux.getRigth().getElem()) < 0){ //SI ES MENOR, SE BAJA
+            if(elem.compareTo(aux.getRigth().getElem()) <= 0){ //SI ES MENOR, SE BAJA
                 if(aux.getDown() == null)
                     return aux;
                 else
@@ -71,7 +71,7 @@ public class SkipList<T extends Comparable<T>>{
         }
     }
     
-    public void lista(){
+    public void listaBase(){
        this.altura = 0;
         while(cabeza.getDown() != null){
             cabeza = cabeza.getDown();
@@ -79,39 +79,33 @@ public class SkipList<T extends Comparable<T>>{
         }
         cabeza.setUp(null);
         cola.setUp(null); 
-    }
-    
-    public void restruc(){
-        NodoS<T> aux;
-        this.lista();
-        aux = cabeza;
+        NodoS aux = cabeza;
         while(aux.getRigth() != null){
             aux.setUp(null);
             aux = aux.getRigth();
         }
+        
+    }
+    
+    public void restruc(){
+        NodoS<T> aux;
+        this.listaBase();
         aux = cabeza.getRigth();
         boolean resp = false;
-        int cont = 0;
-        while(altura < Math.log(size) && cont < (size/2)){
-            while(aux != null && aux.getRigth() != null){
+        while(altura < Math.log(size)){
+            while(aux.getRigth() != null && aux.getElem() != null){
                 if(resp){
-                    this.ligaH(this.findUpL(aux), this.cloneUp(aux), this.findUpR(aux));
+                    this.ligaH(findUpL(aux), cloneUp(aux), findUpR(aux));
                     resp = false;
                 }
                 else
                     resp = true;
                 aux = aux.getRigth();
             }
-            int k = 0;
-            aux = cabeza;
-            while(k < cont){
-                aux = aux.getRigth();
-                k++;
-            }
+            aux = cabeza.getRigth();
             resp = false;
-            cont++;
         }
-        System.out.println("RESTRUCTURACIÓN: ");
+        System.out.println("\nRESTRUCTURACIÓN: ");
         this.impH();
     }
     
@@ -141,9 +135,9 @@ public class SkipList<T extends Comparable<T>>{
                 busq = busq.getUp();
             }
             size--;
-            System.out.println("El elemento: '" + elem + "' se eliminó correctamente\n");
+            System.out.print("El elemento: '" + elem + "' se eliminó correctamente\n");
         }else
-            System.out.println("El elemento: '" + elem + "' no se eliminó porque no está en la estrucura\n");
+            System.out.print("El elemento: '" + elem + "' no se eliminó porque no está en la estrucura\n");
     }
     
     //MÉTODOS AUXILIARES
@@ -252,7 +246,7 @@ public class SkipList<T extends Comparable<T>>{
                 aux2 = aux2.getRigth();
             }
         }
-        System.out.println("Número de elementos: " + size + "\nAltura máxima: " + (int)(Math.log(size)+1) + "\nAltura actual: " + altura + "\nImpresión:");
+        System.out.println("Número de elementos: " + size + "\nAltura máxima: " + (int)(Math.log(size)+1) + "\nAltura actual: " + altura);
         System.out.println(cad.toString());
     }
     
@@ -274,7 +268,7 @@ public class SkipList<T extends Comparable<T>>{
                 else{
                     while(j < altura){
                         j++;
-                        lamina[i][j] = "-";
+                        lamina[i][j] = ".";
                     }
                     break;
                 }
@@ -298,23 +292,28 @@ public class SkipList<T extends Comparable<T>>{
             }
             cad.append("\n");
         }
-        System.out.println("Número de elementos: " + size + "\nAltura máxima: " + (int)(Math.log(size)+1) + "\nAltura actual: " + altura + "\nImpresión:");
+        System.out.println("Número de elementos: " + size + "\nAltura máxima: " + (int)(Math.log(size)+1) + "\nAltura actual: " + altura);
         System.out.println(cad.toString());
     }
     
     public static void main(String[] args) {
         SkipList<Integer> l = new SkipList();
         //INSERCIÓN
-        for(int i = 1; i <= 10 ; i++)
+        int tam = 100;
+        for(int i = 1; i <= tam; i++)
             l.insertN(i);
         //l.impV();
         l.impH();
         
         //BORRADO
-        l.delete(5);
-        l.delete(4);
+        int i = 1;
+        while(i < tam/4){
+            l.delete(i);
+            i++;
+        }
+        
+        //REESTRUCURACIÓN
         l.restruc();
-        //l.impH();
         
     }
 }
