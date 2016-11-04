@@ -61,7 +61,7 @@ public class SkipList<T extends Comparable<T>>{
             else
                 return find(aux.getDown(), elem);
         }else{
-            if(elem.compareTo(aux.getRigth().getElem()) <= 0){ //SI ES MENOR, SE BAJA
+            if(elem.compareTo(aux.getRigth().getElem()) <= 0){ //SI ES MENOR O IGUAL, SE BAJA
                 if(aux.getDown() == null)
                     return aux;
                 else
