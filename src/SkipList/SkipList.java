@@ -71,26 +71,48 @@ public class SkipList<T extends Comparable<T>>{
         }
     }
     
-    public void restruc(){
-        NodoS<T> aux;
+    public void lista(){
+       this.altura = 0;
         while(cabeza.getDown() != null){
             cabeza = cabeza.getDown();
             cola = cola.getDown();
         }
+        cabeza.setUp(null);
+        cola.setUp(null); 
+    }
+    
+    public void restruc(){
+        NodoS<T> aux;
+        this.lista();
         aux = cabeza;
-        while(aux != null){
+        while(aux.getRigth() != null){
             aux.setUp(null);
             aux = aux.getRigth();
         }
-        aux = cabeza;
-        int i = 0;
-        boolean band = false;
-        while(i < this.getAncho()/2){
-            while(aux != null)
-            if(band){
-                this.cloneUp(aux);
+        aux = cabeza.getRigth();
+        boolean resp = false;
+        int cont = 0;
+        while(altura < Math.log(size) && cont < (size/2)){
+            while(aux != null && aux.getRigth() != null){
+                if(resp){
+                    this.ligaH(this.findUpL(aux), this.cloneUp(aux), this.findUpR(aux));
+                    resp = false;
+                }
+                else
+                    resp = true;
+                aux = aux.getRigth();
             }
+            int k = 0;
+            aux = cabeza;
+            while(k < cont){
+                aux = aux.getRigth();
+                k++;
+            }
+            resp = false;
+            cont++;
         }
+        System.out.println("RESTRUCTURACIÓN: ");
+        this.impH();
     }
     
     public void insertN(T elem){
@@ -162,7 +184,6 @@ public class SkipList<T extends Comparable<T>>{
             cabeza = up;
             altura++;
         }
-            
         if(nodo == cola)
             cola = up;
         return up;
@@ -286,14 +307,14 @@ public class SkipList<T extends Comparable<T>>{
         //INSERCIÓN
         for(int i = 1; i <= 10 ; i++)
             l.insertN(i);
-        l.impV();
+        //l.impV();
         l.impH();
         
         //BORRADO
         l.delete(5);
         l.delete(4);
-
-        l.impH();
+        l.restruc();
+        //l.impH();
         
     }
 }
