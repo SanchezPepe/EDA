@@ -46,6 +46,10 @@ public class SkipList<T extends Comparable<T>>{
     }
     
     private NodoS<T> find(NodoS<T> aux, T elem){
+//        if(aux != null){
+//            System.out.println("ELEMENTO DE AUX: " + aux.getElem());
+//        }else
+//            System.out.println("null");
         if(aux.getElem() != null && aux.getElem().equals(elem)){ //SI LO ENCONTRÉ
             if(aux.getDown() == null) //SI NO TIENE ABAJO
                 return aux;
@@ -55,22 +59,27 @@ public class SkipList<T extends Comparable<T>>{
                 return aux;
             }
         }
-        if(esCola(aux.getRigth())){ //SI EL DERECHO ES COLA
+        if(esCola(aux.getRigth())){
+            System.out.println("ACAA");//SI EL DERECHO ES COLA
             if(aux.getDown() == null)
                 return aux;
             else
                 return find(aux.getDown(), elem);
         }else{
             int resp = elem.compareTo(aux.getRigth().getElem()); 
-            if(resp <= 0){ //SI ES MENOR O IGUAL, SE BAJA
+            if(resp >= 0){ //SI ES MENOR O IGUAL, SE BAJA
+               return find(aux.getRigth(), elem); 
+            }else{
                 if(aux.getDown() == null){
-                    System.out.println("aqui" + aux.getRigth().getElem());
+                    System.out.println("AQUI" + aux.getRigth().getElem());
                     return aux;
                 }
-                else
+                else{
+                    System.out.println("ACA");
                     return find(aux.getDown(), elem);
-            }else //SI ES MAYOR SE RECORRE
-                return find(aux.getRigth(), elem);
+                }
+            }
+                
         }
     }
     
@@ -141,6 +150,7 @@ public class SkipList<T extends Comparable<T>>{
             System.out.print("El elemento: '" + elem + "' se eliminó correctamente\n");
         }else
             System.out.print("El elemento: '" + elem + "' no se eliminó porque no está en la estrucura\n");
+        this.impH();
     }
     
     //MÉTODOS AUXILIARES
@@ -302,7 +312,7 @@ public class SkipList<T extends Comparable<T>>{
     public static void main(String[] args) {
         SkipList<Integer> l = new SkipList();
         //INSERCIÓN
-        int tam = 100;
+        int tam = 25;
         for(int i = 1; i <= tam; i++)
             l.insertN(i);
         //l.impV();
