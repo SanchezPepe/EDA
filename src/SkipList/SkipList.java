@@ -46,11 +46,7 @@ public class SkipList<T extends Comparable<T>>{
     }
     
     private NodoS<T> find(NodoS<T> aux, T elem){
-//        if(aux != null){
-//            System.out.println("ELEMENTO DE AUX: " + aux.getElem());
-//        }else
-//            System.out.println("null");
-        if(aux.getElem() != null && aux.getElem().equals(elem)){ //SI LO ENCONTRÉ
+        if(aux.getElem() != null && aux.getElem().equals(elem)) //SI LO ENCONTRÉ
             if(aux.getDown() == null) //SI NO TIENE ABAJO
                 return aux;
             else{
@@ -58,28 +54,20 @@ public class SkipList<T extends Comparable<T>>{
                     aux = aux.getDown();
                 return aux;
             }
-        }
-        if(esCola(aux.getRigth())){
-            System.out.println("ACAA");//SI EL DERECHO ES COLA
+        if(esCola(aux.getRigth())){ //SI EL DERECHO ES COLA
             if(aux.getDown() == null)
                 return aux;
             else
                 return find(aux.getDown(), elem);
         }else{
             int resp = elem.compareTo(aux.getRigth().getElem()); 
-            if(resp >= 0){ //SI ES MENOR O IGUAL, SE BAJA
+            if(resp >= 0) //SI ES MENOR O IGUAL, SE BAJA
                return find(aux.getRigth(), elem); 
-            }else{
-                if(aux.getDown() == null){
-                    System.out.println("AQUI" + aux.getRigth().getElem());
+            else
+                if(aux.getDown() == null)
                     return aux;
-                }
-                else{
-                    System.out.println("ACA");
+                else
                     return find(aux.getDown(), elem);
-                }
-            }
-                
         }
     }
     
@@ -142,15 +130,18 @@ public class SkipList<T extends Comparable<T>>{
         if(busq.getElem() != null && busq.getElem().equals(elem)){
             if(busq.getUp() == null)
                 desliga(busq);
-            while(busq.getUp() != null){
-                desliga(busq);
-                busq = busq.getUp();
+            else{
+                while(busq.getUp() != null){
+                    desliga(busq);
+                    busq = busq.getUp();
+                }
+                if(busq.getUp() == null)
+                    desliga(busq);
             }
             size--;
             System.out.print("El elemento: '" + elem + "' se eliminó correctamente\n");
         }else
             System.out.print("El elemento: '" + elem + "' no se eliminó porque no está en la estrucura\n");
-        this.impH();
     }
     
     //MÉTODOS AUXILIARES
@@ -293,7 +284,7 @@ public class SkipList<T extends Comparable<T>>{
         }
         for(int i = altura; i >= 0; i--){
             for(int j = 0; j < ancho; j++){
-                cad.append("  ").append(lamina[j][i]);
+                cad.append(" ").append(lamina[j][i]);
                 if(lamina[j][i] != null && lamina[j][i].toString().length() < 4){
                     int k = lamina[j][i].toString().length();
                     while(k < 4){
@@ -315,15 +306,18 @@ public class SkipList<T extends Comparable<T>>{
         int tam = 25;
         for(int i = 1; i <= tam; i++)
             l.insertN(i);
-        //l.impV();
         l.impH();
         
         //BORRADO
         int i = 1;
-        while(i < tam/4){
-            l.delete(i);
+        Random r = new Random();
+        while(i < tam/10){
+            l.delete(r.nextInt(tam*2));
             i++;
         }
+        System.out.println();
+        l.impH();
+        
         
         //REESTRUCURACIÓN
         l.restruc();
