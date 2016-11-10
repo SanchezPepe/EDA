@@ -44,14 +44,14 @@ public class HashTable<T> {
     public void add(T elem){
         if(cont >= this.factorDeCarga * tabla.length)
             expand();
-        int index = hash(elem) % tabla.length;
+        int index = Hash(elem) % tabla.length;
         Nodo<T> nodo = new Nodo<T>(elem);
         nodo.setSig(nodo);
         cont++;
     }
     
     public boolean find(T elem){
-        int aux = hash(elem) % tabla.length;
+        int aux = Hash(elem) % tabla.length;
         Nodo<T> actual = tabla[aux];
         while(actual != null || actual.getElem().equals(elem))
             actual = actual.getSig();
@@ -59,6 +59,10 @@ public class HashTable<T> {
             return true;
         else
             return false;
+    }
+
+    private int Hash(T elem) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
