@@ -108,7 +108,7 @@ public class MaxHeap<T extends Comparable <T>>{
     
     public static void main(String[] args) {
         MaxHeap<Integer> h = new MaxHeap();
-        int tam = 50;
+        int tam = 55;
         boolean select = true; //ALEATORIA(TRUE) || DEFINIDA(FALSE)
         Integer arre[] = {null,5,0,8,10,2,3,11,1,9,7};
         
