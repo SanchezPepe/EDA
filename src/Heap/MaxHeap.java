@@ -17,8 +17,12 @@ public class MaxHeap<T extends Comparable <T>>{
         tree = (T[]) new Comparable[20];
         heapSize = 0;
     }
+    
+    public T HeapMaximum(){
+        return tree[1];
+    }   
 
-    public void addElement(T elem){
+    public void BuildMaxHeap(T elem){
         this.heapSize++;
         if(heapSize == tree.length)
             this.expandCapacity();
@@ -33,8 +37,7 @@ public class MaxHeap<T extends Comparable <T>>{
         }
     }
     
-    //MAX-HEAPIFY
-    public void adjust(int index){
+    public void MaxHeapify(int index){
         int izq = index*2;
         int der = (index*2)+1;
         int grande;
@@ -46,7 +49,7 @@ public class MaxHeap<T extends Comparable <T>>{
             grande = der;
         if(grande != index && tree[grande].compareTo(tree[index]) > 0){
             swap(index, grande);
-            adjust(grande);
+            MaxHeapify(grande);
         }else{
             if(izq <= heapSize && tree[izq].compareTo(tree[index]) > 0)
                 swap(izq, index);
@@ -54,14 +57,15 @@ public class MaxHeap<T extends Comparable <T>>{
     
     }
     
-    public void sort(){
+    public void HeapSort(){
         T sort[] = (T[]) new Comparable[heapSize+1];
-        for(int i = heapSize; i >= 1; i--){
+        int num = heapSize;
+        for(int i = 1; i <= num; i++){
             sort[i] = tree[1];      //SE ELIMINA LA RAÍZ Y SE PASA AL SORTED
             swap(1, heapSize);
             tree[heapSize] = null;
             heapSize--;
-            adjust(1);
+            MaxHeapify(1);
         }
         this.printArray(sort);
     }
@@ -108,7 +112,7 @@ public class MaxHeap<T extends Comparable <T>>{
     
     public static void main(String[] args) {
         MaxHeap<Integer> h = new MaxHeap();
-        int tam = 55;
+        int tam = 25;
         boolean select = true; //ALEATORIA(TRUE) || DEFINIDA(FALSE)
         Integer arre[] = {null,5,0,8,10,2,3,11,1,9,7};
         
@@ -121,7 +125,7 @@ public class MaxHeap<T extends Comparable <T>>{
             while(i < arre.length){
                 aux = r.nextInt(tam*2);
                 if(!l.contains(aux)){
-                    h.addElement(aux);
+                    h.BuildMaxHeap(aux);
                     l.add(aux);
                 }
                 i++;
@@ -130,7 +134,7 @@ public class MaxHeap<T extends Comparable <T>>{
         }else{
             int i = 1;
             while(i < arre.length){
-                h.addElement(arre[i]);
+                h.BuildMaxHeap(arre[i]);
                 i++;
             }
             //INICIAL
@@ -142,7 +146,7 @@ public class MaxHeap<T extends Comparable <T>>{
         
         //HEAPSORT
         System.out.println("Sorted:");
-        h.sort();
+        h.HeapSort();
         
     }
 }
