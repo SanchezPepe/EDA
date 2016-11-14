@@ -39,7 +39,7 @@ public class GrafoLA<T> {
         visitado[i] = true;
         actual = grafo[i];
         while(actual != null){
-            DFS(actual.getId, lista);
+            DFS(actual.getId(), lista);
             actual = actual.getSig();
         }
     }

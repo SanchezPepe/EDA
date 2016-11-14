@@ -38,5 +38,9 @@ public class Nodo <T> {
     public void setElem(T elem){
         this.elem = elem;
     }
+
+    public int getId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
