@@ -5,7 +5,6 @@
  */
 package Grafo;
 
-import EDA.Nodo;
 import java.util.ArrayList;
 
 /**
@@ -14,30 +13,35 @@ import java.util.ArrayList;
  */
 public class GrafoLA<T> {
     
-    private Nodo<T> vertices[];
-    private Nodo<T> grafo[];
+    private NodoG<T> grafo[];
     private int numV;
-    private int numE;
     private boolean visitado[];
+    
+    public GrafoLA(NodoG g[]){
+        this.grafo = g;
+        this.numV = g.length;
+        iniciaVisitados();
+    }
     
     public void DFS(){
         ArrayList<T> lista = new ArrayList<T>();
-        iniciaVisitados();
         for(int i = 0; i < numV; i++)
             DFS(i, lista);
     }
     
     public void DFS(int i, ArrayList<T> lista){
-        Nodo<T> actual;
+        NodoG<T> hermano = this.grafo[i];
         if(visitado[i])
             return;
-        lista.add(vertices[i].getElem());
+        lista.add(grafo[i].getElem());
         visitado[i] = true;
-        actual = grafo[i];
-        while(actual != null){
-            DFS(actual.getId(), lista);
-            actual = actual.getSig();
+        if(lista.size() == this.numV) //CAMINO HAMILTONIANO
+            System.out.println(lista.toString());
+        while(hermano != null){
+            DFS(hermano.getIndex(), lista);
+            hermano = hermano.getSig();
         }
+        visitado[i] = false;
     }
     
     private void iniciaVisitados(){
@@ -45,5 +49,12 @@ public class GrafoLA<T> {
             visitado[i] = false;
     }
     
+    public static void main(String[] args) {
+        NodoG<Character> grafo[] = new NodoG[5];
+        grafo[0] = new NodoG('A', 0, 0);
+        
+        
+        
+    }
     
 }

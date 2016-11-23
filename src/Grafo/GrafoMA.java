@@ -5,7 +5,6 @@
  */
 package Grafo;
 
-import EDA.Nodo;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -16,8 +15,8 @@ import java.util.Queue;
  */
 public class GrafoMA<T> {
     
-    private Nodo<T> vertices[];
-    private Nodo<T> grafo[][];
+    private NodoG<T> vertices[];
+    private NodoG<T> grafo[][];
     private int numV;
     private int numE;
     private boolean visitado[];
@@ -40,13 +39,13 @@ public class GrafoMA<T> {
     }
     
     public void BFS(int i, ArrayList<T> lista){
-        Queue<Nodo<T>> q = new ArrayDeque<Nodo<T>>();
-        Nodo<T> actual;
+        Queue<NodoG<T>> q = new ArrayDeque<NodoG<T>>();
+        NodoG<T> actual;
         q.add(vertices[i]);
         visitado[i] = true;
         while(!q.isEmpty()){
             actual = q.remove();
-            i = actual.getId();
+            i = actual.getIndex();
             for(int j = 0; j < numV; j++)
                 if(grafo[i][j] != null && !visitado[j]){
                     visitado[j] = true;
@@ -54,6 +53,7 @@ public class GrafoMA<T> {
                 }
         }
     }
+    
     
     private void iniciaVisitados(){
         for(int i = 0; i < numV; i++)
