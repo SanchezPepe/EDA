@@ -29,7 +29,7 @@ public class GrafoLA<T> {
             DFS(i, lista);
     }
     
-    public void DFS(int i, ArrayList<T> lista){
+    public void DFS(int i, ArrayList<T> lista){ //(Depth Fist Search)
         NodoG<T> hermano = this.grafo[i];
         if(visitado[i])
             return;
@@ -51,7 +51,14 @@ public class GrafoLA<T> {
     
     public static void main(String[] args) {
         NodoG<Character> grafo[] = new NodoG[5];
-        grafo[0] = new NodoG('A', 0, 0);
+        int letra = 65;
+        for(int i = 0; i < grafo.length; i++){
+            grafo[i] = new NodoG((char)letra, 0, i);
+            letra++;
+            System.out.println(grafo[i].getElem().toString());
+        }
+        
+        
         
         
         
